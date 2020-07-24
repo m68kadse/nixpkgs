@@ -52,6 +52,8 @@ let
 
     bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
 
+    bigarray-overlap = callPackage ../development/ocaml-modules/bigarray-overlap { };
+
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
     bigstring = callPackage ../development/ocaml-modules/bigstring { };
@@ -348,11 +350,15 @@ let
 
     gg = callPackage ../development/ocaml-modules/gg { };
 
-    git = callPackage ../development/ocaml-modules/git { inherit (pkgs) git; };
+    git = callPackage ../development/ocaml-modules/git {
+      git-binary = pkgs.git;
+    };
 
     git-http = callPackage ../development/ocaml-modules/git-http { };
 
-    git-unix = callPackage ../development/ocaml-modules/git-unix { };
+    git-unix = callPackage ../development/ocaml-modules/git-unix {
+      git-binary = pkgs.git;
+    };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
@@ -752,6 +758,8 @@ let
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
+    tsort = callPackage ../development/ocaml-modules/tsort { };
+
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
@@ -831,6 +839,8 @@ let
       else null;
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
+
+    ppx_yojson_conv_lib = callPackage ../development/ocaml-modules/ppx_yojson_conv_lib {};
 
     printbox = callPackage ../development/ocaml-modules/printbox { };
 

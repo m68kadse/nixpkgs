@@ -51,7 +51,7 @@
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
 # have permission to use the official firefox branding.
 #
-# Fur purposes of documentation the statement of @sylvestre:
+# For purposes of documentation the statement of @sylvestre:
 # > As the person who did part of the work described in the LWN article
 # > and release manager working for Mozilla, I can confirm the statement
 # > that I made in
@@ -177,7 +177,7 @@ stdenv.mkDerivation ({
 
     BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      ${stdenv.cc.default_cxx_stdlib_compile} \
+      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
       ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
       ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/${stdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"

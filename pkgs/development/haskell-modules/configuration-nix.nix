@@ -443,6 +443,9 @@ self: super: builtins.intersectAttrs super {
                             [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
   });
 
+  # requires an X11 display in test suite
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+
   # depends on 'hie' executable
   lsp-test = dontCheck super.lsp-test;
 
@@ -715,11 +718,6 @@ self: super: builtins.intersectAttrs super {
 
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
-
-  # dhall's tests access the network.
-  dhall_1_29_0 = dontCheck super.dhall_1_29_0;
-  dhall_1_31_1 = dontCheck super.dhall_1_31_1;
-  dhall_1_32_0 = dontCheck super.dhall_1_32_0;
 
   cut-the-crap =
     let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 ];

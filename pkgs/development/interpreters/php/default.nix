@@ -8,7 +8,7 @@ let
     { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
-    , systemd, valgrind
+    , systemd, valgrind, xcbuild
 
     , version
     , sha256
@@ -143,7 +143,8 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ];
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ]
+            ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -177,7 +178,10 @@ let
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport    "--enable-fpm"
             ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optional (pearSupport && (lib.versionOlder version "7.4")) "--enable-libxml"
+            ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
+              "--enable-libxml"
+              "--with-libxml-dir=${libxml2.dev}"
+            ]
             ++ lib.optional pharSupport   "--enable-phar"
             ++ lib.optional phpdbgSupport "--enable-phpdbg"
 
@@ -264,24 +268,24 @@ let
         };
 
   php72base = callPackage generic (_args // {
-    version = "7.2.31";
-    sha256 = "0057x1s43f9jidmrl8daka6wpxclxc1b1pm5cjbz616p8nbmb9qv";
+    version = "7.2.32";
+    sha256 = "19wqbpvsd6c6iaad00h0m0xnx4r8fj56pwfhki2cw5xdfi10lp3i";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   });
 
   php73base = callPackage generic (_args // {
-    version = "7.3.19";
-    sha256 = "199l1lr7ima92icic7b1bqlb036md78m305lc3v6zd4zw8qix70d";
+    version = "7.3.20";
+    sha256 = "1pl9bjwvdva2yx4sh465z9cr4bnr8mvv008w71sy1kqsj6a7ivf6";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   });
 
   php74base = callPackage generic (_args // {
-    version = "7.4.7";
-    sha256 = "0ynq4fz54jpzh9nxvbgn3vrdad2clbac0989ai0yrj2ryc0hs3l0";
+    version = "7.4.8";
+    sha256 = "0ql01sfg8l7y2bfwmnjxnfw9irpibnz57ssck24b00y00nkd6j3a";
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([

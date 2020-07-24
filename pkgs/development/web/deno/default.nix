@@ -18,22 +18,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0034c2qp8sf6li7d38rnd6h9vhhi82p5rysm0pkrdhlmfqkqdgma";
+    sha256 = "0dxagp4gyn7057zcp78bhhr9qfbblvsynds2b0f4b3di8kg65m7f";
     fetchSubmodules = true;
   };
-  cargoSha256 = "1wbqxv2mzbs27j617a88gd7z0fjnjr2z1nklqfk49y62v8f1vsm1";
+  cargoSha256 = "1fgi6hbziky7szw18wma87bx8i74ax9dc90yyldvjikn4hjc8ipc";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = with stdenv.lib; [ ]
-    ++ optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance

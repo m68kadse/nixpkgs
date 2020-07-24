@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "libpod";
+    repo = "podman";
     rev = "v${version}";
-    sha256 = "11avj4q3xh7qbcbs8h4jis0bdfkvvh193sflwiz8hcp41qjvinz4";
+    sha256 = "1jqdv3kij2q97qn4niqxxgfva9ajr4wjgx40qk5yhs01d3g0qgmd";
   };
 
   vendorSha256 = null;
@@ -44,11 +44,14 @@ buildGoModule rec {
   buildPhase = ''
     patchShebangs .
     ${if stdenv.isDarwin
-      then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
-      else "make podman docs"}
+      then "make podman-remote"
+      else "make podman"}
+    make docs
   '';
 
-  installPhase = ''
+  installPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    mv bin/{podman-remote,podman}
+  '' + ''
     install -Dm555 bin/podman $out/bin/podman
     installShellCompletion --bash completions/bash/podman
     installShellCompletion --zsh completions/zsh/_podman
@@ -63,6 +66,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }
