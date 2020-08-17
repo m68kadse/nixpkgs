@@ -39,9 +39,7 @@ rustPlatform.buildRustPackage rec {
     )
   ];
 
-  # Disable tests until they can be run with --features no-self-update
-  doCheck = false;
-  #doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
   postInstall = ''
     pushd $out/bin
@@ -75,6 +73,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mic92 ];
-    platforms = platforms.all;
   };
 }
